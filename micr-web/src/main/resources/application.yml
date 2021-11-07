@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: micr-web
+  thymeleaf:
+    cache: false
+  redis:
+    host: localhost
+    port: 6380
+#    password: 123
+
+
+server:
+  port: 8000
+  servlet:
+    context-path: /ylb
+
+dubbo:
+  registry:
+    address: zookeeper://localhost:2181
+  scan:
+    base-packages: com.bjpowernode.web
+  consumer:
+    check: false
+    timeout: 10000
+    retries: 0
+
+#短信的配置
+jdwx:
+  sms:
+    url: https://way.jd.com/chuangxin/dxjk
+    content: 【动力金融】你的验证码是：%s，3分钟内有效！请不要泄露
+    appkey: 3680fa919b771148da626bbcbd459475
+  realname:
+    url: https://way.jd.com/youhuoBeijing/test
+    appkey: 3680fa919b771148da626bbcbd459475
+
+#支付服务快钱的入口地址
+payservice:
+  kuaiqian:
+    url: http://localhost:9000/pay/kq/recvweb

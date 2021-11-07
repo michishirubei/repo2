@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <script type="text/javascript" th:inline="javascript">
+        //项目的访问路径 /ylb
+        var globalContextPath= [[${#request.getContextPath()}]]
+
+        var url = [[${#request.getRequestURL()}]]
+        var param = [[${#request.getQueryString()}]];
+        var requestUrl = url + ( param === null ? "" : "?"+param)
+
+
+        $(function(){
+            //获取来源的页面url，使用Thymeleaf的 #request
+            //登录
+            $(".btn-login").on("click",function(){
+                window.location.href = globalContextPath + "/user/page/login?returnUrl="+requestUrl;
+            })
+        })
+
+
+    </script>
+</body>
+</html>

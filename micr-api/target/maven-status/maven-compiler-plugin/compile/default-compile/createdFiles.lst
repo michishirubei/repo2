@@ -1,0 +1,14 @@
+com\bjpowernode\entity\ProductEntity.class
+com\bjpowernode\model\InvestResult.class
+com\bjpowernode\entity\RechargeEntity.class
+com\bjpowernode\model\IndexData.class
+com\bjpowernode\service\bussiness\ProductService.class
+com\bjpowernode\entity\UserEntity.class
+com\bjpowernode\entity\BidEntity.class
+com\bjpowernode\entity\AccountEntity.class
+com\bjpowernode\service\bussiness\RechargeService.class
+com\bjpowernode\service\user\AccountService.class
+com\bjpowernode\entity\IncomeEntity.class
+com\bjpowernode\model\BidInfo.class
+com\bjpowernode\service\user\UserService.class
+com\bjpowernode\service\bussiness\InvestService.class

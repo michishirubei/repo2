@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjpowernode.dataservice.mapper.ProductEntityMapper">
+  <resultMap id="BaseResultMap" type="com.bjpowernode.entity.ProductEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="cycle" jdbcType="INTEGER" property="cycle" />
+    <result column="release_time" jdbcType="DATE" property="releaseTime" />
+    <result column="product_type" jdbcType="INTEGER" property="productType" />
+    <result column="product_no" jdbcType="VARCHAR" property="productNo" />
+    <result column="product_money" jdbcType="DECIMAL" property="productMoney" />
+    <result column="left_product_money" jdbcType="DECIMAL" property="leftProductMoney" />
+    <result column="bid_min_limit" jdbcType="DECIMAL" property="bidMinLimit" />
+    <result column="bid_max_limit" jdbcType="DECIMAL" property="bidMaxLimit" />
+    <result column="product_status" jdbcType="INTEGER" property="productStatus" />
+    <result column="product_full_time" jdbcType="TIMESTAMP" property="productFullTime" />
+    <result column="product_desc" jdbcType="VARCHAR" property="productDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_name, rate, cycle, release_time, product_type, product_no, product_money, 
+    left_product_money, bid_min_limit, bid_max_limit, product_status, product_full_time, 
+    product_desc
+  </sql>
+
+
+  <!--按主键查询-->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from b_product_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <!--计算利率的平均值-->
+  <select id="selectAvgRate" resultType="java.math.BigDecimal">
+       select ROUND(avg(rate),2) avgRate
+       from b_product_info
+  </select>
+
+  <!--按类型分页查询产品-->
+  <select id="selectByProductTypePage" resultMap="BaseResultMap" >
+    select <include refid="Base_Column_List" />
+    from b_product_info
+    where product_type = #{type}
+    order by rate desc
+    limit #{offSet},#{rows}
+  </select>
+
+  <!--某产品类型的总记录数量-->
+  <select id="selectCountByProductType" resultType="java.lang.Integer">
+    SELECT
+	    count(id) AS ct
+    FROM
+        b_product_info
+    WHERE
+        product_type = #{ptype}
+  </select>
+  <!--查询满标的产品-->
+  <select id="selectManBiao" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM b_product_info
+    WHERE
+    product_status = 1
+    AND
+    (product_full_time &gt;= #{beginDate}  AND product_full_time &lt; #{endDate})
+  </select>
+
+  <!--产品剩余可投资金额-->
+  <update id="updateLeftMoneyByInvest">
+    update b_product_info set  left_product_money = left_product_money - #{bidMoney}
+    where id = #{id} and ( left_product_money - #{bidMoney} >=0 )
+  </update>
+
+  <!--新产品的状态product_status-->
+  <update id="updateProductStatus">
+    update  b_product_info set  product_status = #{pstatus}, product_full_time = now() where id = #{id}
+  </update>
+
+
+  <update id="updateStatus">
+    update  b_product_info set  product_status = #{pstatus} where id = #{id}
+  </update>
+
+</mapper>
